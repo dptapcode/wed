@@ -14,18 +14,21 @@ html, body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    overflow-x: hidden;
+}
+.wrapper {
     display: flex;
-    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
     align-items: center;
-    overflow: hidden;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px 0;
 }
 .hop {
-    width: 50vw;
-    height: 100vh;
-    position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,16 +41,13 @@ canvas {
     height: 100%;
 }
 @keyframes dap {
-    0% { transform: translate(-50%, -50%) scale(0.9); }
-    30% { transform: translate(-50%, -50%) scale(0.75); }
-    60% { transform: translate(-50%, -50%) scale(1.05); }
-    100% { transform: translate(-50%, -50%) scale(0.9); }
+    0% { transform: scale(0.9); }
+    30% { transform: scale(0.75); }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(0.9); }
 }
 .chu {
     position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translate(-50%, -50%);
     color: #FF4D4D;
     font-size: 24px;
     font-family: 'Pattaya', sans-serif;
@@ -58,24 +58,22 @@ canvas {
     white-space: nowrap;
 }
 .thu {
-    position: absolute;
-    top: 50%;
-    right: 2.5%;
-    width: 45%;
-    transform: translateY(-50%);
+    width: 40%;
+    min-width: 320px;
     z-index: 10;
     color: #FF4D4D;
     font-size: 20px;
     font-family: 'Pattaya', sans-serif;
     font-weight: bold;
-    line-height: 1.4;
+    line-height: 1.6;
     text-align: left;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     border: 2px solid #FF4D4D;
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
+    margin: 20px;
 }
 .sao {
     position: absolute;
@@ -134,40 +132,22 @@ canvas {
     100% { opacity: 0; transform: scale(0.5); }
 }
 @media (max-width: 768px) {
-    .hop {
-        width: 100vw;
-        left: 50%;
-        top: 30%;
-    }
-    .chu {
-        left: 50%;
-        top: 30%;
-        font-size: 18px;
-    }
-    .thu {
-        width: 90%;
-        right: 5%;
-        left: 5%;
-        top: 70%;
-        transform: translateY(-20%);
-        font-size: 16px;
-        padding: 15px;
-    }
-    @keyframes dap {
-        0% { transform: translate(-50%, -50%) scale(0.5); }
-        30% { transform: translate(-50%, -50%) scale(0.4); }
-        60% { transform: translate(-50%, -50%) scale(0.6); }
-        100% { transform: translate(-50%, -50%) scale(0.5); }
-    }
+    body { overflow-y: auto; }
+    .wrapper { flex-direction: column; justify-content: flex-start; }
+    .hop { width: 300px; height: 300px; margin-top: 50px; }
+    .chu { font-size: 16px; }
+    .thu { width: 85%; font-size: 18px; margin: 10px auto 50px auto; }
 }
 </style>
 </head>
 <body>
-<div class="hop">
-    <canvas id="tim"></canvas>
+<div class="wrapper">
+    <div class="hop">
+        <canvas id="tim"></canvas>
+        <div class="chu"> Hai Ninh Minh Anh</div>
+    </div>
+    <div class="thu" id="thu"></div>
 </div>
-<div class="chu"> Hai Ninh Minh Anh</div>
-<div class="thu" id="thu"></div>
 <script>
 var cd = {
     hat: { sl: 3500, tg: 2.5, vt: 120, hu: -1.2, kt: 16 }
@@ -321,14 +301,14 @@ var kho = (function() {
         for (var i = 0; i < sl; i++) {
             var vt = dt(Math.PI - 2 * Math.PI * Math.random());
             var huong = vt.sao().dai(cd.hat.vt);
-            k.them(cv.width / 2 + vt.x, cv.height / 2 - vt.y, huong.x, -huong.y);
+            k.them(cv.width / 2 + vt.x * (cv.width/600), cv.height / 2 - vt.y * (cv.height/600), huong.x, -huong.y);
         }
         k.capnhat(dtg);
         k.ve(ctx, anh);
     }
     function kt() {
-        cv.width = cv.clientWidth;
-        cv.height = cv.clientHeight;
+        cv.width = cv.parentElement.clientWidth;
+        cv.height = cv.parentElement.clientHeight;
     }
     window.onresize = kt;
     setTimeout(function() {
