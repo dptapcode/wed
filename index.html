@@ -16,20 +16,29 @@ html, body {
     background-repeat: no-repeat;
     overflow-x: hidden;
 }
-.wrapper {
+.khung {
     display: flex;
     width: 100%;
     min-height: 100vh;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 20px 0;
-    gap: 30px;
+    flex-direction: row;
     box-sizing: border-box;
+}
+.trai {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.phai {
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .hop {
     width: 100%;
-    max-width: 450px; /* Đã co nhỏ một chút */
+    max-width: 350px;
     aspect-ratio: 1 / 1;
     position: relative;
     display: flex;
@@ -44,15 +53,15 @@ canvas {
     height: 100%;
 }
 @keyframes dap {
-    0% { transform: scale(0.9); }
-    30% { transform: scale(0.75); }
-    60% { transform: scale(1.05); }
-    100% { transform: scale(0.9); }
+    0% { transform: scale(1); }
+    30% { transform: scale(0.8); }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); }
 }
 .chu {
     position: absolute;
     color: #FF4D4D;
-    font-size: 24px;
+    font-size: 20px;
     font-family: 'Pattaya', sans-serif;
     text-align: center;
     z-index: 10;
@@ -61,11 +70,11 @@ canvas {
     white-space: nowrap;
 }
 .thu {
-    width: 90%;
-    max-width: 500px;
+    width: 85%;
+    max-width: 700px;
     z-index: 10;
     color: #FF4D4D;
-    font-size: 20px;
+    font-size: 22px;
     font-family: 'Pattaya', sans-serif;
     font-weight: bold;
     line-height: 1.6;
@@ -73,7 +82,7 @@ canvas {
     background: rgba(255, 255, 255, 0.3);
     border: 2px solid #FF4D4D;
     border-radius: 15px;
-    padding: 25px;
+    padding: 25px 35px;
     box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
     backdrop-filter: blur(8px);
     box-sizing: border-box;
@@ -134,169 +143,170 @@ canvas {
     50% { opacity: 1; transform: scale(1.5); }
     100% { opacity: 0; transform: scale(0.5); }
 }
-/* Media Query cho di động dọc */
 @media (max-width: 950px) {
     body { overflow-y: auto; }
-    .wrapper { flex-direction: column; justify-content: flex-start; gap: 10px; padding: 10px 0; }
-    .hop { max-width: 320px; } /* Co nhỏ .hop trên mobile dọc */
-    .chu { font-size: 18px; }
-    .thu { width: 95%; max-width: none; font-size: 16px; padding: 15px; margin-bottom: 30px; }
+    .khung { flex-direction: column; padding: 20px 0; gap: 20px; }
+    .trai, .phai { width: 100%; }
+    .hop { max-width: 320px; }
+    .thu { width: 90%; font-size: 16px; margin-bottom: 30px; padding: 15px; }
 }
-/* Media Query cho di động xoay ngang */
 @media (max-height: 500px) and (orientation: landscape) {
-    .wrapper { flex-direction: row; align-items: center; gap: 15px; }
-    .hop { max-width: 250px; } /* Co nhỏ .hop trên mobile ngang */
-    .chu { font-size: 16px; }
-    .thu { width: 50%; font-size: 14px; padding: 15px; }
+    .khung { flex-direction: row; }
+    .trai { width: 35%; }
+    .phai { width: 65%; }
+    .hop { max-width: 200px; }
+    .thu { width: 90%; font-size: 14px; padding: 15px; }
 }
 </style>
 </head>
 <body>
-<div class="wrapper">
-    <div class="hop">
-        <canvas id="tim"></canvas>
-        <div class="chu"> Hai Ninh Minh Anh</div>
+<div class="khung">
+    <div class="trai">
+        <div class="hop">
+            <canvas id="tim"></canvas>
+            <div class="chu"> Hai Ninh Minh Anh</div>
+        </div>
     </div>
-    <div class="thu" id="thu"></div>
+    <div class="phai">
+        <div class="thu" id="thu"></div>
+    </div>
 </div>
 <script>
 var cd = {
-    hat: { sl: 3500, tg: 2.5, vt: 120, hu: -1.2, kt: 16 }
+    h: { sl: 2000, tg: 2, vt: 100, hu: -1.3, kt: 13 }
 };
 
 (function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
 
-var diem = (function() {
-    function diem(x, y) {
+var d = (function() {
+    function d(x, y) {
         this.x = (typeof x !== 'undefined') ? x : 0;
         this.y = (typeof y !== 'undefined') ? y : 0;
     }
-    diem.prototype.sao = function() {
-        return new diem(this.x, this.y);
+    d.prototype.sao = function() {
+        return new d(this.x, this.y);
     };
-    diem.prototype.dai = function(d) {
-        if (typeof d == 'undefined') return Math.sqrt(this.x * this.x + this.y * this.y);
+    d.prototype.dai = function(da) {
+        if (typeof da == 'undefined') return Math.sqrt(this.x * this.x + this.y * this.y);
         this.chuan();
-        this.x *= d;
-        this.y *= d;
+        this.x *= da;
+        this.y *= da;
         return this;
     };
-    diem.prototype.chuan = function() {
-        var d = this.dai();
-        this.x /= d;
-        this.y /= d;
+    d.prototype.chuan = function() {
+        var da = this.dai();
+        this.x /= da;
+        this.y /= da;
         return this;
     };
-    return diem;
+    return d;
 })();
 
-var hat = (function() {
-    function hat() {
-        this.vt = new diem();
-        this.toc = new diem();
-        this.gia = new diem();
+var h = (function() {
+    function h() {
+        this.vt = new d();
+        this.toc = new d();
+        this.gia = new d();
         this.tuoi = 0;
     }
-    hat.prototype.tao = function(x, y, dx, dy) {
+    h.prototype.tao = function(x, y, dx, dy) {
         this.vt.x = x;
         this.vt.y = y;
         this.toc.x = dx;
         this.toc.y = dy;
-        this.gia.x = dx * cd.hat.hu;
-        this.gia.y = dy * cd.hat.hu;
+        this.gia.x = dx * cd.h.hu;
+        this.gia.y = dy * cd.h.hu;
         this.tuoi = 0;
     }
-    hat.prototype.capnhat = function(dt) {
+    h.prototype.capnhat = function(dt) {
         this.vt.x += this.toc.x * dt;
         this.vt.y += this.toc.y * dt;
         this.toc.x += this.gia.x * dt;
         this.toc.y += this.gia.y * dt;
         this.tuoi += dt;
     };
-    hat.prototype.ve = function(ctx, anh) {
+    h.prototype.ve = function(ctx, anh) {
         function m(t) { return (--t) * t * t + 1; }
-        var kt = anh.width * m(this.tuoi / cd.hat.tg);
-        ctx.globalAlpha = 1 - this.tuoi / cd.hat.tg;
+        var kt = anh.width * m(this.tuoi / cd.h.tg);
+        ctx.globalAlpha = 1 - this.tuoi / cd.h.tg;
         ctx.drawImage(anh, this.vt.x - kt / 2, this.vt.y - kt / 2, kt, kt);
     };
-    return hat;
+    return h;
 })();
 
-var kho = (function() {
-    var mang, hd = 0, tr = 0, tg = cd.hat.tg;
-    function kho(sl) {
-        mang = new Array(sl);
-        for (var i = 0; i < mang.length; i++) mang[i] = new hat();
+var k = (function() {
+    var a, hd = 0, tr = 0, tg = cd.h.tg;
+    function k(sl) {
+        a = new Array(sl);
+        for (var i = 0; i < a.length; i++) a[i] = new h();
     }
-    kho.prototype.them = function(x, y, dx, dy) {
-        mang[tr].tao(x, y, dx, dy);
+    k.prototype.them = function(x, y, dx, dy) {
+        a[tr].tao(x, y, dx, dy);
         tr++;
-        if (tr == mang.length) tr = 0;
+        if (tr == a.length) tr = 0;
         if (hd == tr ) hd++;
-        if (hd == mang.length) hd = 0;
+        if (hd == a.length) hd = 0;
     };
-    kho.prototype.capnhat = function(dt) {
+    k.prototype.capnhat = function(dt) {
         var i;
         if (hd < tr) {
-            for (i = hd; i < tr; i++) mang[i].capnhat(dt);
+            for (i = hd; i < tr; i++) a[i].capnhat(dt);
         }
         if (tr < hd) {
-            for (i = hd; i < mang.length; i++) mang[i].capnhat(dt);
-            for (i = 0; i < tr; i++) mang[i].capnhat(dt);
+            for (i = hd; i < a.length; i++) a[i].capnhat(dt);
+            for (i = 0; i < tr; i++) a[i].capnhat(dt);
         }
-        while (mang[hd].tuoi >= tg && hd != tr) {
+        while (a[hd].tuoi >= tg && hd != tr) {
             hd++;
-            if (hd == mang.length) hd = 0;
+            if (hd == a.length) hd = 0;
         }
     };
-    kho.prototype.ve = function(ctx, anh) {
+    k.prototype.ve = function(ctx, anh) {
         var i;
         if (hd < tr) {
-            for (i = hd; i < tr; i++) mang[i].ve(ctx, anh);
+            for (i = hd; i < tr; i++) a[i].ve(ctx, anh);
         }
         if (tr < hd) {
-            for (i = hd; i < mang.length; i++) mang[i].ve(ctx, anh);
-            for (i = 0; i < tr; i++) mang[i].ve(ctx, anh);
+            for (i = hd; i < a.length; i++) a[i].ve(ctx, anh);
+            for (i = 0; i < tr; i++) a[i].ve(ctx, anh);
         }
     };
-    return kho;
+    return k;
 })();
 
 (function(cv) {
     var ctx = cv.getContext('2d'),
-        k = new kho(cd.hat.sl),
-        tocdo = cd.hat.sl / cd.hat.tg,
+        kh = new k(cd.h.sl),
+        tocdo = cd.h.sl / cd.h.tg,
         t;
-    function dt(goc) {
-        return new diem(
-            260 * Math.pow(Math.sin(goc), 3),
-            210 * Math.cos(goc) - 80 * Math.cos(2 * goc) - 30 * Math.cos(3 * goc) - 15 * Math.cos(4 * goc) + 40
+    function to(goc) {
+        return new d(
+            160 * Math.pow(Math.sin(goc), 3),
+            130 * Math.cos(goc) - 50 * Math.cos(2 * goc) - 20 * Math.cos(3 * goc) - 10 * Math.cos(4 * goc) + 25
         );
     }
     var anh = (function() {
         var cv1 = document.createElement('canvas'),
             ctx1 = cv1.getContext('2d');
-        cv1.width = cd.hat.kt;
-        cv1.height = cd.hat.kt;
-        function to(goc) {
-            var d = dt(goc);
-            d.x = cd.hat.kt / 2 + d.x * cd.hat.kt / 450;
-            d.y = cd.hat.kt / 2 - d.y * cd.hat.kt / 450;
-            return d;
+        cv1.width = cd.h.kt;
+        cv1.height = cd.h.kt;
+        function ta(goc) {
+            var d1 = to(goc);
+            d1.x = cd.h.kt / 2 + d1.x * cd.h.kt / 350;
+            d1.y = cd.h.kt / 2 - d1.y * cd.h.kt / 350;
+            return d1;
         }
         ctx1.beginPath();
         var goc = -Math.PI;
-        var d = to(goc);
-        ctx1.moveTo(d.x, d.y);
+        var d1 = ta(goc);
+        ctx1.moveTo(d1.x, d1.y);
         while (goc < Math.PI) {
             goc += 0.01;
-            d = to(goc);
-            ctx1.lineTo(d.x, d.y);
+            d1 = ta(goc);
+            ctx1.lineTo(d1.x, d1.y);
         }
         ctx1.closePath();
-        ctx1.fillStyle = '#FF5E5E';
-        ctx1.shadowBlur = 15;
-        ctx1.shadowColor = '#FF0000';
+        ctx1.fillStyle = '#FF5CA4';
         ctx1.fill();
         var img = new Image();
         img.src = cv1.toDataURL();
@@ -309,33 +319,25 @@ var kho = (function() {
         t = tmoi;
         ctx.clearRect(0, 0, cv.width, cv.height);
         var sl = tocdo * dtg;
-        
-        // Sửa lỗi tỷ lệ vẽ và lỗi vt.x cho y
-        var s = Math.min(cv.width / 520, cv.height / 420); // Tính tỷ lệ dưa trên kích thước logic của trái tim
-        s *= 0.8; // Co nhỏ trái tim một chút theo yêu cầu
-        
         for (var i = 0; i < sl; i++) {
-            var vt = dt(Math.PI - 2 * Math.PI * Math.random());
-            var huong = vt.sao().dai(cd.hat.vt);
-            k.them(cv.width / 2 + vt.x * s, cv.height / 2 - vt.y * s, huong.x, -huong.y); // Sử dụng tỷ lệ s và sửa lỗi vt.x cho y
+            var vt = to(Math.PI - 2 * Math.PI * Math.random());
+            var huong = vt.sao().dai(cd.h.vt);
+            kh.them(cv.width / 2 + vt.x, cv.height / 2 - vt.y, huong.x, -huong.y);
         }
-        k.capnhat(dtg);
-        k.ve(ctx, anh);
+        kh.capnhat(dtg);
+        kh.ve(ctx, anh);
     }
     function kt() {
-        cv.width = cv.parentElement.clientWidth;
-        cv.height = cv.parentElement.clientHeight;
+        cv.width = 500;
+        cv.height = 500;
     }
-    window.onresize = kt;
-    setTimeout(function() {
-        kt();
-        hthi();
-    }, 10);
+    kt();
+    hthi();
 })(document.getElementById('tim'));
 
 const nen = document.body;
 
-function taosao() {
+function ts() {
     const s = document.createElement("div");
     const r = Math.random() * 3 + 1;
     const mau = Math.random() * 360;
@@ -351,19 +353,19 @@ function taosao() {
     setTimeout(() => s.remove(), 2500);
 }
 
-function taohao() {
-    const h = document.createElement("div");
+function th() {
+    const h1 = document.createElement("div");
     const r = Math.random() * 150 + 50;
     const mau = Math.random() * 360;
-    h.className = "hao";
-    h.style.width = r + "px";
-    h.style.height = r + "px";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.top = Math.random() * 100 + "vh";
-    h.style.background = `radial-gradient(circle, hsla(${mau}, 100%, 65%, 0.8) 0%, hsla(${mau}, 100%, 65%, 0) 70%)`;
-    h.style.animationDuration = Math.random() * 4 + 2 + "s";
-    nen.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
+    h1.className = "hao";
+    h1.style.width = r + "px";
+    h1.style.height = r + "px";
+    h1.style.left = Math.random() * 100 + "vw";
+    h1.style.top = Math.random() * 100 + "vh";
+    h1.style.background = `radial-gradient(circle, hsla(${mau}, 100%, 65%, 0.8) 0%, hsla(${mau}, 100%, 65%, 0) 70%)`;
+    h1.style.animationDuration = Math.random() * 4 + 2 + "s";
+    nen.appendChild(h1);
+    setTimeout(() => h1.remove(), 6000);
 }
 
 var ma = [
@@ -372,7 +374,7 @@ var ma = [
     "img/nhom1.jpg", "img/nhom2.jpg", "img/nhom3.jpg", "img/nhom4.jpg"
 ];
 
-function taoa() {
+function ta() {
     const a = document.createElement("img");
     a.className = "a";
     a.src = ma[Math.floor(Math.random() * ma.length)];
@@ -398,9 +400,9 @@ function tt() {
     setTimeout(() => m.remove(), 3000);
 }
 
-setInterval(taosao, 25);
-setInterval(taohao, 250);
-setInterval(taoa, 600);
+setInterval(ts, 25);
+setInterval(th, 250);
+setInterval(ta, 600);
 setInterval(tt, 300);
 
 var nd = "Nhân ngày 8/3!<br>Chúc hai chị em nhóm mình là Ninh với Mánh sẽ luôn xinh đẹp, tự tin và gặp thật nhiều may mắn trong cuộc sống.<br>Mới chơi với nhau gần 1 năm nhưng đi đâu cũng có nhau, gì cũng kể cho nhau. T văn không hay, chữ cũng chả tốt, t chúc Mánh với Ninh luôn hạnh phúc sắp, tìm được anh người yêu như Joo Ho Jin. Chúc cho chị em 5 chữ ngoại. Ngoại ngữ - Ngoại hình - Ngoại giao - Ngoại tệ - Ngoại lệ của anh.<br>Mong là sắp tới sẽ được đi chơi với nhau nhiều hơn, tạo với nhau thêm nhiều kỉ niệm mới nhé.<br>Chúc chị em 8/3 vui vẻ.";
