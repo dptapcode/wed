@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Heart</title>
 <link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
 <style>
@@ -131,6 +132,33 @@ canvas {
     0% { opacity: 0; transform: scale(0.5); }
     50% { opacity: 1; transform: scale(1.5); }
     100% { opacity: 0; transform: scale(0.5); }
+}
+@media (max-width: 768px) {
+    .hop {
+        width: 100vw;
+        left: 50%;
+        top: 30%;
+    }
+    .chu {
+        left: 50%;
+        top: 30%;
+        font-size: 18px;
+    }
+    .thu {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        top: 70%;
+        transform: translateY(-20%);
+        font-size: 16px;
+        padding: 15px;
+    }
+    @keyframes dap {
+        0% { transform: translate(-50%, -50%) scale(0.5); }
+        30% { transform: translate(-50%, -50%) scale(0.4); }
+        60% { transform: translate(-50%, -50%) scale(0.6); }
+        100% { transform: translate(-50%, -50%) scale(0.5); }
+    }
 }
 </style>
 </head>
@@ -393,7 +421,7 @@ function g() {
             ht.innerHTML += nd.charAt(i);
             i++;
         }
-        setTimeout(g, 25);
+        setTimeout(g, 15);
     }
 }
 setTimeout(g, 1000);
