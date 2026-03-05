@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Heart</title>
 <link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
 <style>
@@ -14,33 +13,18 @@ html, body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    overflow-x: hidden;
-}
-.khung {
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-    align-items: center;
-    flex-direction: row;
-    box-sizing: border-box;
-}
-.trai {
-    width: 25%;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.phai {
-    width: 75%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
 }
 .hop {
-    width: 100%;
-    max-width: 350px;
-    aspect-ratio: 1 / 1;
-    position: relative;
+    width: 50vw;
+    height: 100vh;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,15 +37,18 @@ canvas {
     height: 100%;
 }
 @keyframes dap {
-    0% { transform: scale(1); }
-    30% { transform: scale(0.8); }
-    60% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0% { transform: translate(-50%, -50%) scale(0.9); }
+    30% { transform: translate(-50%, -50%) scale(0.75); }
+    60% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(0.9); }
 }
 .chu {
     position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
     color: #FF4D4D;
-    font-size: 20px;
+    font-size: 24px;
     font-family: 'Pattaya', sans-serif;
     text-align: center;
     z-index: 10;
@@ -70,22 +57,24 @@ canvas {
     white-space: nowrap;
 }
 .thu {
-    width: 85%;
-    max-width: 700px;
+    position: absolute;
+    top: 50%;
+    right: 2.5%;
+    width: 45%;
+    transform: translateY(-50%);
     z-index: 10;
     color: #FF4D4D;
-    font-size: 22px;
+    font-size: 20px;
     font-family: 'Pattaya', sans-serif;
     font-weight: bold;
-    line-height: 1.6;
+    line-height: 1.4;
     text-align: left;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
     border: 2px solid #FF4D4D;
     border-radius: 15px;
-    padding: 25px 35px;
+    padding: 25px;
     box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
-    backdrop-filter: blur(8px);
-    box-sizing: border-box;
+    backdrop-filter: blur(5px);
 }
 .sao {
     position: absolute;
@@ -143,170 +132,152 @@ canvas {
     50% { opacity: 1; transform: scale(1.5); }
     100% { opacity: 0; transform: scale(0.5); }
 }
-@media (max-width: 950px) {
-    body { overflow-y: auto; }
-    .khung { flex-direction: column; padding: 20px 0; gap: 20px; }
-    .trai, .phai { width: 100%; }
-    .hop { max-width: 320px; }
-    .thu { width: 90%; font-size: 16px; margin-bottom: 30px; padding: 15px; }
-}
-@media (max-height: 500px) and (orientation: landscape) {
-    .khung { flex-direction: row; }
-    .trai { width: 35%; }
-    .phai { width: 65%; }
-    .hop { max-width: 200px; }
-    .thu { width: 90%; font-size: 14px; padding: 15px; }
-}
 </style>
 </head>
 <body>
-<div class="khung">
-    <div class="trai">
-        <div class="hop">
-            <canvas id="tim"></canvas>
-            <div class="chu"> Hai Ninh Minh Anh</div>
-        </div>
-    </div>
-    <div class="phai">
-        <div class="thu" id="thu"></div>
-    </div>
+<div class="hop">
+    <canvas id="tim"></canvas>
 </div>
+<div class="chu"> Hai Ninh Minh Anh</div>
+<div class="thu" id="thu"></div>
 <script>
 var cd = {
-    h: { sl: 2000, tg: 2, vt: 100, hu: -1.3, kt: 13 }
+    hat: { sl: 3500, tg: 2.5, vt: 120, hu: -1.2, kt: 16 }
 };
 
 (function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
 
-var d = (function() {
-    function d(x, y) {
+var diem = (function() {
+    function diem(x, y) {
         this.x = (typeof x !== 'undefined') ? x : 0;
         this.y = (typeof y !== 'undefined') ? y : 0;
     }
-    d.prototype.sao = function() {
-        return new d(this.x, this.y);
+    diem.prototype.sao = function() {
+        return new diem(this.x, this.y);
     };
-    d.prototype.dai = function(da) {
-        if (typeof da == 'undefined') return Math.sqrt(this.x * this.x + this.y * this.y);
+    diem.prototype.dai = function(d) {
+        if (typeof d == 'undefined') return Math.sqrt(this.x * this.x + this.y * this.y);
         this.chuan();
-        this.x *= da;
-        this.y *= da;
+        this.x *= d;
+        this.y *= d;
         return this;
     };
-    d.prototype.chuan = function() {
-        var da = this.dai();
-        this.x /= da;
-        this.y /= da;
+    diem.prototype.chuan = function() {
+        var d = this.dai();
+        this.x /= d;
+        this.y /= d;
         return this;
     };
-    return d;
+    return diem;
 })();
 
-var h = (function() {
-    function h() {
-        this.vt = new d();
-        this.toc = new d();
-        this.gia = new d();
+var hat = (function() {
+    function hat() {
+        this.vt = new diem();
+        this.toc = new diem();
+        this.gia = new diem();
         this.tuoi = 0;
     }
-    h.prototype.tao = function(x, y, dx, dy) {
+    hat.prototype.tao = function(x, y, dx, dy) {
         this.vt.x = x;
         this.vt.y = y;
         this.toc.x = dx;
         this.toc.y = dy;
-        this.gia.x = dx * cd.h.hu;
-        this.gia.y = dy * cd.h.hu;
+        this.gia.x = dx * cd.hat.hu;
+        this.gia.y = dy * cd.hat.hu;
         this.tuoi = 0;
     }
-    h.prototype.capnhat = function(dt) {
+    hat.prototype.capnhat = function(dt) {
         this.vt.x += this.toc.x * dt;
         this.vt.y += this.toc.y * dt;
         this.toc.x += this.gia.x * dt;
         this.toc.y += this.gia.y * dt;
         this.tuoi += dt;
     };
-    h.prototype.ve = function(ctx, anh) {
+    hat.prototype.ve = function(ctx, anh) {
         function m(t) { return (--t) * t * t + 1; }
-        var kt = anh.width * m(this.tuoi / cd.h.tg);
-        ctx.globalAlpha = 1 - this.tuoi / cd.h.tg;
+        var kt = anh.width * m(this.tuoi / cd.hat.tg);
+        ctx.globalAlpha = 1 - this.tuoi / cd.hat.tg;
         ctx.drawImage(anh, this.vt.x - kt / 2, this.vt.y - kt / 2, kt, kt);
     };
-    return h;
+    return hat;
 })();
 
-var k = (function() {
-    var a, hd = 0, tr = 0, tg = cd.h.tg;
-    function k(sl) {
-        a = new Array(sl);
-        for (var i = 0; i < a.length; i++) a[i] = new h();
+var kho = (function() {
+    var mang, hd = 0, tr = 0, tg = cd.hat.tg;
+    function kho(sl) {
+        mang = new Array(sl);
+        for (var i = 0; i < mang.length; i++) mang[i] = new hat();
     }
-    k.prototype.them = function(x, y, dx, dy) {
-        a[tr].tao(x, y, dx, dy);
+    kho.prototype.them = function(x, y, dx, dy) {
+        mang[tr].tao(x, y, dx, dy);
         tr++;
-        if (tr == a.length) tr = 0;
+        if (tr == mang.length) tr = 0;
         if (hd == tr ) hd++;
-        if (hd == a.length) hd = 0;
+        if (hd == mang.length) hd = 0;
     };
-    k.prototype.capnhat = function(dt) {
+    kho.prototype.capnhat = function(dt) {
         var i;
         if (hd < tr) {
-            for (i = hd; i < tr; i++) a[i].capnhat(dt);
+            for (i = hd; i < tr; i++) mang[i].capnhat(dt);
         }
         if (tr < hd) {
-            for (i = hd; i < a.length; i++) a[i].capnhat(dt);
-            for (i = 0; i < tr; i++) a[i].capnhat(dt);
+            for (i = hd; i < mang.length; i++) mang[i].capnhat(dt);
+            for (i = 0; i < tr; i++) mang[i].capnhat(dt);
         }
-        while (a[hd].tuoi >= tg && hd != tr) {
+        while (mang[hd].tuoi >= tg && hd != tr) {
             hd++;
-            if (hd == a.length) hd = 0;
+            if (hd == mang.length) hd = 0;
         }
     };
-    k.prototype.ve = function(ctx, anh) {
+    kho.prototype.ve = function(ctx, anh) {
         var i;
         if (hd < tr) {
-            for (i = hd; i < tr; i++) a[i].ve(ctx, anh);
+            for (i = hd; i < tr; i++) mang[i].ve(ctx, anh);
         }
         if (tr < hd) {
-            for (i = hd; i < a.length; i++) a[i].ve(ctx, anh);
-            for (i = 0; i < tr; i++) a[i].ve(ctx, anh);
+            for (i = hd; i < mang.length; i++) mang[i].ve(ctx, anh);
+            for (i = 0; i < tr; i++) mang[i].ve(ctx, anh);
         }
     };
-    return k;
+    return kho;
 })();
 
 (function(cv) {
     var ctx = cv.getContext('2d'),
-        kh = new k(cd.h.sl),
-        tocdo = cd.h.sl / cd.h.tg,
+        k = new kho(cd.hat.sl),
+        tocdo = cd.hat.sl / cd.hat.tg,
         t;
-    function to(goc) {
-        return new d(
-            160 * Math.pow(Math.sin(goc), 3),
-            130 * Math.cos(goc) - 50 * Math.cos(2 * goc) - 20 * Math.cos(3 * goc) - 10 * Math.cos(4 * goc) + 25
+    function dt(goc) {
+        return new diem(
+            260 * Math.pow(Math.sin(goc), 3),
+            210 * Math.cos(goc) - 80 * Math.cos(2 * goc) - 30 * Math.cos(3 * goc) - 15 * Math.cos(4 * goc) + 40
         );
     }
     var anh = (function() {
         var cv1 = document.createElement('canvas'),
             ctx1 = cv1.getContext('2d');
-        cv1.width = cd.h.kt;
-        cv1.height = cd.h.kt;
-        function ta(goc) {
-            var d1 = to(goc);
-            d1.x = cd.h.kt / 2 + d1.x * cd.h.kt / 350;
-            d1.y = cd.h.kt / 2 - d1.y * cd.h.kt / 350;
-            return d1;
+        cv1.width = cd.hat.kt;
+        cv1.height = cd.hat.kt;
+        function to(goc) {
+            var d = dt(goc);
+            d.x = cd.hat.kt / 2 + d.x * cd.hat.kt / 450;
+            d.y = cd.hat.kt / 2 - d.y * cd.hat.kt / 450;
+            return d;
         }
         ctx1.beginPath();
         var goc = -Math.PI;
-        var d1 = ta(goc);
-        ctx1.moveTo(d1.x, d1.y);
+        var d = to(goc);
+        ctx1.moveTo(d.x, d.y);
         while (goc < Math.PI) {
             goc += 0.01;
-            d1 = ta(goc);
-            ctx1.lineTo(d1.x, d1.y);
+            d = to(goc);
+            ctx1.lineTo(d.x, d.y);
         }
         ctx1.closePath();
-        ctx1.fillStyle = '#FF5CA4';
+        ctx1.fillStyle = '#FF5E5E';
+        ctx1.shadowBlur = 15;
+        ctx1.shadowColor = '#FF0000';
         ctx1.fill();
         var img = new Image();
         img.src = cv1.toDataURL();
@@ -320,24 +291,27 @@ var k = (function() {
         ctx.clearRect(0, 0, cv.width, cv.height);
         var sl = tocdo * dtg;
         for (var i = 0; i < sl; i++) {
-            var vt = to(Math.PI - 2 * Math.PI * Math.random());
-            var huong = vt.sao().dai(cd.h.vt);
-            kh.them(cv.width / 2 + vt.x, cv.height / 2 - vt.y, huong.x, -huong.y);
+            var vt = dt(Math.PI - 2 * Math.PI * Math.random());
+            var huong = vt.sao().dai(cd.hat.vt);
+            k.them(cv.width / 2 + vt.x, cv.height / 2 - vt.y, huong.x, -huong.y);
         }
-        kh.capnhat(dtg);
-        kh.ve(ctx, anh);
+        k.capnhat(dtg);
+        k.ve(ctx, anh);
     }
     function kt() {
-        cv.width = 500;
-        cv.height = 500;
+        cv.width = cv.clientWidth;
+        cv.height = cv.clientHeight;
     }
-    kt();
-    hthi();
+    window.onresize = kt;
+    setTimeout(function() {
+        kt();
+        hthi();
+    }, 10);
 })(document.getElementById('tim'));
 
 const nen = document.body;
 
-function ts() {
+function taosao() {
     const s = document.createElement("div");
     const r = Math.random() * 3 + 1;
     const mau = Math.random() * 360;
@@ -353,19 +327,19 @@ function ts() {
     setTimeout(() => s.remove(), 2500);
 }
 
-function th() {
-    const h1 = document.createElement("div");
+function taohao() {
+    const h = document.createElement("div");
     const r = Math.random() * 150 + 50;
     const mau = Math.random() * 360;
-    h1.className = "hao";
-    h1.style.width = r + "px";
-    h1.style.height = r + "px";
-    h1.style.left = Math.random() * 100 + "vw";
-    h1.style.top = Math.random() * 100 + "vh";
-    h1.style.background = `radial-gradient(circle, hsla(${mau}, 100%, 65%, 0.8) 0%, hsla(${mau}, 100%, 65%, 0) 70%)`;
-    h1.style.animationDuration = Math.random() * 4 + 2 + "s";
-    nen.appendChild(h1);
-    setTimeout(() => h1.remove(), 6000);
+    h.className = "hao";
+    h.style.width = r + "px";
+    h.style.height = r + "px";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.top = Math.random() * 100 + "vh";
+    h.style.background = `radial-gradient(circle, hsla(${mau}, 100%, 65%, 0.8) 0%, hsla(${mau}, 100%, 65%, 0) 70%)`;
+    h.style.animationDuration = Math.random() * 4 + 2 + "s";
+    nen.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
 }
 
 var ma = [
@@ -374,7 +348,7 @@ var ma = [
     "img/nhom1.jpg", "img/nhom2.jpg", "img/nhom3.jpg", "img/nhom4.jpg"
 ];
 
-function ta() {
+function taoa() {
     const a = document.createElement("img");
     a.className = "a";
     a.src = ma[Math.floor(Math.random() * ma.length)];
@@ -400,9 +374,9 @@ function tt() {
     setTimeout(() => m.remove(), 3000);
 }
 
-setInterval(ts, 25);
-setInterval(th, 250);
-setInterval(ta, 600);
+setInterval(taosao, 25);
+setInterval(taohao, 250);
+setInterval(taoa, 600);
 setInterval(tt, 300);
 
 var nd = "Nhân ngày 8/3!<br>Chúc hai chị em nhóm mình là Ninh với Mánh sẽ luôn xinh đẹp, tự tin và gặp thật nhiều may mắn trong cuộc sống.<br>Mới chơi với nhau gần 1 năm nhưng đi đâu cũng có nhau, gì cũng kể cho nhau. T văn không hay, chữ cũng chả tốt, t chúc Mánh với Ninh luôn hạnh phúc sắp, tìm được anh người yêu như Joo Ho Jin. Chúc cho chị em 5 chữ ngoại. Ngoại ngữ - Ngoại hình - Ngoại giao - Ngoại tệ - Ngoại lệ của anh.<br>Mong là sắp tới sẽ được đi chơi với nhau nhiều hơn, tạo với nhau thêm nhiều kỉ niệm mới nhé.<br>Chúc chị em 8/3 vui vẻ.";
@@ -419,7 +393,7 @@ function g() {
             ht.innerHTML += nd.charAt(i);
             i++;
         }
-        setTimeout(g, 15);
+        setTimeout(g, 50);
     }
 }
 setTimeout(g, 1000);
