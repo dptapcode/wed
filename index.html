@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Heart</title>
+<link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
+<style>
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-image: url('anhanh.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.hop {
+    width: 50vw;
+    height: 100vh;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    animation: dap 1.3s infinite;
+}
+canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+@keyframes dap {
+    0% { transform: translate(-50%, -50%) scale(0.9); }
+    30% { transform: translate(-50%, -50%) scale(0.75); }
+    60% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(0.9); }
+}
+.chu {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    color: #FF4D4D;
+    font-size: 24px;
+    font-family: 'Pattaya', sans-serif;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(225, 12, 168, 1);
+    white-space: nowrap;
+}
+.thu {
+    position: absolute;
+    top: 50%;
+    right: 2.5%;
+    width: 45%;
+    transform: translateY(-50%);
+    z-index: 10;
+    color: #FF4D4D;
+    font-size: 20px;
+    font-family: 'Pattaya', sans-serif;
+    font-weight: bold;
+    line-height: 1.4;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #FF4D4D;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+    backdrop-filter: blur(5px);
+}
+.sao {
+    position: absolute;
+    border-radius: 50%;
+    animation: nhay linear forwards;
+    z-index: 1;
+}
+.hao {
+    position: absolute;
+    border-radius: 50%;
+    animation: sang linear forwards;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+.a {
+    position: absolute;
+    top: -20vh;
+    z-index: 2;
+    animation: roi linear forwards;
+    pointer-events: none;
+    object-fit: cover;
+    filter: drop-shadow(0 0 8px rgba(255, 77, 77, 0.6));
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+}
+.tn {
+    position: absolute;
+    color: #FFB6C1;
+    font-size: 20px;
+    animation: n linear forwards;
+    z-index: 1;
+    text-shadow: 0 0 5px #FFB6C1;
+}
+@keyframes nhay {
+    0% { opacity: 0; transform: scale(0.2); }
+    50% { opacity: 1; transform: scale(1.8); }
+    100% { opacity: 0; transform: scale(0.2); }
+}
+@keyframes sang {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0.8); }
+}
+@keyframes roi {
+    0% { transform: translateY(0) rotate(-15deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(130vh) rotate(15deg); opacity: 0; }
+}
+@keyframes n {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0.5); }
+}
+</style>
+</head>
+<body>
+<div class="hop">
+    <canvas id="tim"></canvas>
+</div>
+<div class="chu"> Hai Ninh Minh Anh</div>
+<div class="thu" id="thu"></div>
+<script>
+var cd = {
+    hat: { sl: 3500, tg: 2.5, vt: 120, hu: -1.2, kt: 16 }
+};
+
+(function(){var b=0;var c=["ms","moz","webkit","o"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)}}}());
+
+var diem = (function() {
+    function diem(x, y) {
+        this.x = (typeof x !== 'undefined') ? x : 0;
+        this.y = (typeof y !== 'undefined') ? y : 0;
+    }
+    diem.prototype.sao = function() {
+        return new diem(this.x, this.y);
+    };
+    diem.prototype.dai = function(d) {
+        if (typeof d == 'undefined') return Math.sqrt(this.x * this.x + this.y * this.y);
+        this.chuan();
+        this.x *= d;
+        this.y *= d;
+        return this;
+    };
+    diem.prototype.chuan = function() {
+        var d = this.dai();
+        this.x /= d;
+        this.y /= d;
+        return this;
+    };
+    return diem;
+})();
+
+var hat = (function() {
+    function hat() {
+        this.vt = new diem();
+        this.toc = new diem();
+        this.gia = new diem();
+        this.tuoi = 0;
+    }
+    hat.prototype.tao = function(x, y, dx, dy) {
+        this.vt.x = x;
+        this.vt.y = y;
+        this.toc.x = dx;
+        this.toc.y = dy;
+        this.gia.x = dx * cd.hat.hu;
+        this.gia.y = dy * cd.hat.hu;
+        this.tuoi = 0;
+    }
+    hat.prototype.capnhat = function(dt) {
+        this.vt.x += this.toc.x * dt;
+        this.vt.y += this.toc.y * dt;
+        this.toc.x += this.gia.x * dt;
+        this.toc.y += this.gia.y * dt;
+        this.tuoi += dt;
+    };
+    hat.prototype.ve = function(ctx, anh) {
+        function m(t) { return (--t) * t * t + 1; }
+        var kt = anh.width * m(this.tuoi / cd.hat.tg);
+        ctx.globalAlpha = 1 - this.tuoi / cd.hat.tg;
+        ctx.drawImage(anh, this.vt.x - kt / 2, this.vt.y - kt / 2, kt, kt);
+    };
+    return hat;
+})();
+
+var kho = (function() {
+    var mang, hd = 0, tr = 0, tg = cd.hat.tg;
+    function kho(sl) {
+        mang = new Array(sl);
+        for (var i = 0; i < mang.length; i++) mang[i] = new hat();
+    }
+    kho.prototype.them = function(x, y, dx, dy) {
+        mang[tr].tao(x, y, dx, dy);
+        tr++;
+        if (tr == mang.length) tr = 0;
+        if (hd == tr ) hd++;
+        if (hd == mang.length) hd = 0;
+    };
+    kho.prototype.capnhat = function(dt) {
+        var i;
+        if (hd < tr) {
+            for (i = hd; i < tr; i++) mang[i].capnhat(dt);
+        }
+        if (tr < hd) {
+            for (i = hd; i < mang.length; i++) mang[i].capnhat(dt);
+            for (i = 0; i < tr; i++) mang[i].capnhat(dt);
+        }
+        while (mang[hd].tuoi >= tg && hd != tr) {
+            hd++;
+            if (hd == mang.length) hd = 0;
+        }
+    };
+    kho.prototype.ve = function(ctx, anh) {
+        var i;
+        if (hd < tr) {
+            for (i = hd; i < tr; i++) mang[i].ve(ctx, anh);
+        }
+        if (tr < hd) {
+            for (i = hd; i < mang.length; i++) mang[i].ve(ctx, anh);
+            for (i = 0; i < tr; i++) mang[i].ve(ctx, anh);
+        }
+    };
+    return kho;
+})();
+
+(function(cv) {
+    var ctx = cv.getContext('2d'),
+        k = new kho(cd.hat.sl),
+        tocdo = cd.hat.sl / cd.hat.tg,
+        t;
+    function dt(goc) {
+        return new diem(
+            260 * Math.pow(Math.sin(goc), 3),
+            210 * Math.cos(goc) - 80 * Math.cos(2 * goc) - 30 * Math.cos(3 * goc) - 15 * Math.cos(4 * goc) + 40
+        );
+    }
+    var anh = (function() {
+        var cv1 = document.createElement('canvas'),
+            ctx1 = cv1.getContext('2d');
+        cv1.width = cd.hat.kt;
+        cv1.height = cd.hat.kt;
+        function to(goc) {
+            var d = dt(goc);
+            d.x = cd.hat.kt / 2 + d.x * cd.hat.kt / 450;
+            d.y = cd.hat.kt / 2 - d.y * cd.hat.kt / 450;
+            return d;
+        }
+        ctx1.beginPath();
+        var goc = -Math.PI;
+        var d = to(goc);
+        ctx1.moveTo(d.x, d.y);
+        while (goc < Math.PI) {
+            goc += 0.01;
+            d = to(goc);
+            ctx1.lineTo(d.x, d.y);
+        }
+        ctx1.closePath();
+        ctx1.fillStyle = '#FF5E5E';
+        ctx1.shadowBlur = 15;
+        ctx1.shadowColor = '#FF0000';
+        ctx1.fill();
+        var img = new Image();
+        img.src = cv1.toDataURL();
+        return img;
+    })();
+    function hthi() {
+        requestAnimationFrame(hthi);
+        var tmoi = new Date().getTime() / 1000,
+            dtg = tmoi - (t || tmoi);
+        t = tmoi;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        var sl = tocdo * dtg;
+        for (var i = 0; i < sl; i++) {
+            var vt = dt(Math.PI - 2 * Math.PI * Math.random());
+            var huong = vt.sao().dai(cd.hat.vt);
+            k.them(cv.width / 2 + vt.x, cv.height / 2 - vt.y, huong.x, -huong.y);
+        }
+        k.capnhat(dtg);
+        k.ve(ctx, anh);
+    }
+    function kt() {
+        cv.width = cv.clientWidth;
+        cv.height = cv.clientHeight;
+    }
+    window.onresize = kt;
+    setTimeout(function() {
+        kt();
+        hthi();
+    }, 10);
+})(document.getElementById('tim'));
+
+const nen = document.body;
+
+function taosao() {
+    const s = document.createElement("div");
+    const r = Math.random() * 3 + 1;
+    const mau = Math.random() * 360;
+    s.className = "sao";
+    s.style.width = r + "px";
+    s.style.height = r + "px";
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.top = Math.random() * 100 + "vh";
+    s.style.backgroundColor = `hsl(${mau}, 100%, 75%)`;
+    s.style.boxShadow = `0 0 ${Math.random() * 15 + 10}px ${Math.random() * 5 + 2}px hsl(${mau}, 100%, 65%)`;
+    s.style.animationDuration = Math.random() * 2 + 0.5 + "s";
+    nen.appendChild(s);
+    setTimeout(() => s.remove(), 2500);
+}
+
+function taohao() {
+    const h = document.createElement("div");
+    const r = Math.random() * 150 + 50;
+    const mau = Math.random() * 360;
+    h.className = "hao";
+    h.style.width = r + "px";
+    h.style.height = r + "px";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.top = Math.random() * 100 + "vh";
+    h.style.background = `radial-gradient(circle, hsla(${mau}, 100%, 65%, 0.8) 0%, hsla(${mau}, 100%, 65%, 0) 70%)`;
+    h.style.animationDuration = Math.random() * 4 + 2 + "s";
+    nen.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+}
+
+var ma = [
+    "img/manh1.jpg", "img/manh2.jpg", "img/manh3.jpg", "img/manh4.jpg", "img/manh5.jpg", "img/manh6.jpg", "img/manh7.jpg", "img/manh8.jpg", "img/manh9.jpg", "img/manh10.jpg", "img/manh11.jpg",
+    "img/ninh1.jpg", "img/ninh2.jpg", "img/ninh3.jpg", "img/ninh4.jpg", "img/ninh5.jpg", "img/ninh6.jpg", "img/ninh7.jpg", "img/ninh8.jpg", "img/ninh9.jpg", "img/ninh10.jpg", "img/ninh11.jpg",
+    "img/nhom1.jpg", "img/nhom2.jpg", "img/nhom3.jpg", "img/nhom4.jpg"
+];
+
+function taoa() {
+    const a = document.createElement("img");
+    a.className = "a";
+    a.src = ma[Math.floor(Math.random() * ma.length)];
+    const kt = Math.random() * 80 + 70;
+    a.style.width = kt + "px";
+    a.style.height = kt + "px";
+    a.style.left = Math.random() * 90 + 5 + "vw";
+    a.style.animationDuration = Math.random() * 6 + 6 + "s";
+    nen.appendChild(a);
+    setTimeout(() => a.remove(), 12000);
+}
+
+function tt() {
+    const m = document.createElement("div");
+    m.className = "tn";
+    m.innerHTML = "❤";
+    const l = Math.random() * 15 + 10;
+    m.style.fontSize = l + "px";
+    m.style.left = Math.random() * 100 + "vw";
+    m.style.top = Math.random() * 100 + "vh";
+    m.style.animationDuration = Math.random() * 2 + 1 + "s";
+    nen.appendChild(m);
+    setTimeout(() => m.remove(), 3000);
+}
+
+setInterval(taosao, 25);
+setInterval(taohao, 250);
+setInterval(taoa, 600);
+setInterval(tt, 300);
+
+var nd = "Nhân ngày 8/3!<br>Chúc hai chị em nhóm mình là Ninh với Mánh sẽ luôn xinh đẹp, tự tin và gặp thật nhiều may mắn trong cuộc sống.<br>Mới chơi với nhau gần 1 năm nhưng đi đâu cũng có nhau, gì cũng kể cho nhau. T văn không hay, chữ cũng chả tốt, t chúc Mánh với Ninh luôn hạnh phúc sắp, tìm được anh người yêu như Joo Ho Jin. Chúc cho chị em 5 chữ ngoại. Ngoại ngữ - Ngoại hình - Ngoại giao - Ngoại tệ - Ngoại lệ của anh.<br>Mong là sắp tới sẽ được đi chơi với nhau nhiều hơn, tạo với nhau thêm nhiều kỉ niệm mới nhé.<br>Chúc chị em 8/3 vui vẻ.";
+var i = 0;
+var ht = document.getElementById('thu');
+ht.innerHTML = "";
+
+function g() {
+    if (i < nd.length) {
+        if (nd.substr(i, 4) === '<br>') {
+            ht.innerHTML += '<br>';
+            i += 4;
+        } else {
+            ht.innerHTML += nd.charAt(i);
+            i++;
+        }
+        setTimeout(g, 25);
+    }
+}
+setTimeout(g, 1000);
+</script>
+</body>
+</html>
